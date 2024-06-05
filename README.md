@@ -1,2 +1,2 @@
-# WIP-JAVA-GAME
-DO NOT DISTRIBUTE
+# Finals
+Bullet Hell Rogue Like

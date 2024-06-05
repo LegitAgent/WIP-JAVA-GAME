@@ -1,7 +1,5 @@
 /**
-	This is a template for a Java file.
-	
-	@author Jienzel Christenzen H. Chua (231567)
+	@author Jienzel Christenzen H. Chua (231567), Martin Darius Alba (230179)
 	@version 02 September 2023
 	
 	I have not discussed the Java language code in my program 
@@ -16,12 +14,17 @@
 	that has been clearly noted with a proper citation in the comments 
 	of my program.
 **/
-
+/**
+* Creates the class for game canvas. It extends from the JComponent class.
+**/
 public class GameStarter{
-	
+/**
+* Creates the game frame and connects to the GameServer
+**/
 	public static void main(String[] args) {
-		GameFrame frame = new GameFrame();
+		GameFrame frame = new GameFrame(); 
 		frame.connectToServer();
 		frame.setUpGUI();
 	}
+	
 }

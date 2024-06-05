@@ -1,7 +1,5 @@
 /**
-	This is a template for a Java file.
-	
-	@author Jienzel Christenzen H. Chua (231567)
+	@author Jienzel Christenzen H. Chua (231567), Martin Darius Alba (230179)
 	@version 02 September 2023
 	
 	I have not discussed the Java language code in my program 
@@ -16,9 +14,10 @@
 	that has been clearly noted with a proper citation in the comments 
 	of my program.
 **/
+
 import java.io.*;
 import java.net.*;
-public class GameServer{
+public class GameServer {
 	private ServerSocket ss;
 	private int numPlayers;
 	private int maxPlayers;
@@ -33,6 +32,11 @@ public class GameServer{
 	private int rotationP1, rotationP2;
 	private int pixelsWalkedP1, pixelsWalkedP2;
 	private boolean idleP1, idleP2;
+	private boolean killedAnEnemyP1, killedAnEnemyP2;
+	private int killedEnemyIndexP1, killedEnemyIndexP2;
+	private double player1Died, player2Died;
+	private int gunTypeP1, gunTypeP2;
+	private int upgradesGunP1, upgradesGunP2;
 
 	public GameServer() {
 		System.out.println("GAME SERVER");
@@ -82,15 +86,12 @@ public class GameServer{
 
 					Thread readThreadp1 = new Thread(p1ReadFromClient);
 					Thread readThreadp2 = new Thread(p2ReadFromClient);
-					readThreadp1.start();
-					readThreadp2.start();
-
 					Thread writeThreadp1 = new Thread(p1WriteToClient);
 					Thread writeThreadp2 = new Thread(p2WriteToClient);
+					readThreadp1.start();
+					readThreadp2.start();
 					writeThreadp1.start();
 					writeThreadp2.start();
-
-
 				}
 			}
 
@@ -122,6 +123,12 @@ public class GameServer{
 						rotationP1 = dataIn.readInt();
 						pixelsWalkedP1 = dataIn.readInt();
 						idleP1 = dataIn.readBoolean();
+						player1Died = dataIn.readDouble();
+						gunTypeP1 = dataIn.readInt();
+						upgradesGunP1 = dataIn.readInt();
+
+						killedAnEnemyP1 = dataIn.readBoolean();
+						killedEnemyIndexP1 = dataIn.readInt();
 					}
 					else {
 						p2x = dataIn.readDouble();
@@ -133,6 +140,12 @@ public class GameServer{
 						rotationP2 = dataIn.readInt();
 						pixelsWalkedP2 = dataIn.readInt();
 						idleP2 = dataIn.readBoolean();
+						player2Died = dataIn.readDouble();
+						gunTypeP2 = dataIn.readInt();
+						upgradesGunP2 = dataIn.readInt();
+
+						killedAnEnemyP2 = dataIn.readBoolean();
+						killedEnemyIndexP2 = dataIn.readInt();
 					}
 				}
 			} catch(IOException ex) {
@@ -163,6 +176,12 @@ public class GameServer{
 						dataOut.writeInt(rotationP2);
 						dataOut.writeInt(pixelsWalkedP2);
 						dataOut.writeBoolean(idleP2);
+						dataOut.writeDouble(player2Died);
+						dataOut.writeInt(gunTypeP2);
+						dataOut.writeInt(upgradesGunP2);
+
+						dataOut.writeBoolean(killedAnEnemyP2);
+						dataOut.writeInt(killedEnemyIndexP2);
 					}
 					else {
 						dataOut.writeDouble(p1x);
@@ -174,14 +193,25 @@ public class GameServer{
 						dataOut.writeInt(rotationP1);
 						dataOut.writeInt(pixelsWalkedP1);
 						dataOut.writeBoolean(idleP1);
+						dataOut.writeDouble(player1Died);
+						dataOut.writeInt(gunTypeP1);
+						dataOut.writeInt(upgradesGunP1);
+						
+						dataOut.writeBoolean(killedAnEnemyP1);
+						dataOut.writeInt(killedEnemyIndexP1);
 					}
 
 					dataOut.flush();
 					try {
-						Thread.sleep(10);
+						Thread.sleep(20);
 					} catch(InterruptedException ex) {
 						System.out.println("Error: GameServer.WriteToClient.Thread.sleep()");
 					}
+					/**
+					data.Out.writeInt(enemyPosX);
+					data.Out.writeInt(enemyPosY);
+					data.Out.writeInt(enemyHP);
+					**/
 				}
 			} catch(IOException ex) {
 				System.out.println("Error: GameServer.WriteToClient.run()");
